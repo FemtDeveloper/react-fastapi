@@ -1,11 +1,12 @@
 from datetime import datetime
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql.schema import Column, ForeignKey
-from sqlalchemy.sql.sqltypes import Date, Integer, String
-from backend.database import Base
+from sqlalchemy.sql.sqltypes import Date, DateTime, Integer, String
+from database import Base
 import passlib.hash as _hash
+
 class User(Base):
-    __tablenames__ ='users'
+    __tablename__ ='users'
     id = Column(Integer, primary_key=True, index=True)
     email =  Column(String, unique=True, index=True)
     hashed_password = Column(String)
@@ -16,15 +17,15 @@ class User(Base):
         return _hash.bcrypt.verify(password, self.hashed_password)
     
 class Lead(Base):
-    __tablenames__ ='leads'
+    __tablename__ ='leads'
     id = Column(Integer, primary_key=True, index=True)
-    owner_id =  Column(Integer, ForeignKey=('users.id'))
+    owner_id =  Column(Integer, ForeignKey('users.id'))
     first_name = Column(String,  index=True)
     last_name = Column(String,  index=True)
     email = Column(String,  index=True)
     company = Column(String,  index=True, default='')
     note = Column(String, default='')
-    date_created = Column(datetime, default=datetime.utcnow)
-    date_updated = Column(datetime, default=datetime.utcnow)
+    date_created = Column(DateTime, default=datetime.utcnow)
+    date_updated = Column(DateTime, default=datetime.utcnow)
     
     owner = relationship('User', back_populates='leads')
