@@ -1,0 +1,7 @@
+fastapi
+starlette
+typing
+passlib
+SQLAlchemy
+python-jose
+datetime

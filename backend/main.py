@@ -1,12 +1,11 @@
 from sqlalchemy.sql.type_api import INDEXABLE
-import services
+import services, schemas
 from struct import pack
 from typing import List
-import schemas
 from fastapi import FastAPI, HTTPException
 from starlette import status
 from database import get_db, Base, engine
-from services import get_user_by_email, new_user, authenticate_user,create_token, get_current_user,lead_create
+from services import get_user_by_email, new_user, authenticate_user,create_token, get_current_user,lead_create, lead_delete, lead_update
 from fastapi.params import Depends
 from sqlalchemy.orm.session import Session
 from schemas import UserCreate
@@ -51,4 +50,20 @@ async def get_leads( user: schemas.User=Depends(get_current_user),
 @app.get('/api/leads/{lead_id}')
 async def get_lead(lead_id: int, user: schemas.User=Depends(get_current_user), 
                     db: Session = Depends(get_db)):
-    pass
+    return await services.get_lead_by_id(lead_id, user, db)
+
+@app.delete('/api/{lead_id}', status_code= 204)
+async def delete_lead(lead_id: int, user: schemas.User=Depends(get_current_user), 
+                    db: Session = Depends(get_db)):    
+    await lead_delete(lead_id, user, db)
+    return 'Lead sucessfully deleted'
+
+@app.put('/api/{lead_id}', status_code= 200)
+async def update_lead(lead_id: int, lead: schemas.LeadCreate, user: schemas.User=Depends(get_current_user), 
+                    db: Session = Depends(get_db)):
+    await lead_update(lead_id, lead, user, db)
+    return 'Lead sucessfully Updated'
+
+@app.get('/api')
+async def root():
+    return {"message": "This is a marvelous app"}
