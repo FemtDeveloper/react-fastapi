@@ -66,4 +66,4 @@ async def update_lead(lead_id: int, lead: schemas.LeadCreate, user: schemas.User
 
 @app.get('/api')
 async def root():
-    return {"message": "This is a marvelous app"}
+    return {"message": "This is my response"}

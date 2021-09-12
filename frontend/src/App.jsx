@@ -11,11 +11,12 @@ function App() {
       },
     };
     const response = await axios
-      .get("http://127.0.0.1:8000/api/leads")
+      // .get("http://127.0.0.1:8000/api")
+      .get("https://6x6myt.deta.dev/")
       .then((response) => {
         const data = response.data;
         console.log(data);
-        setMessage(data.message);
+        setMessage(data.Hello);
       });
   };
 
