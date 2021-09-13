@@ -1,0 +1,1 @@
+{"id":"407c7463-a6fe-45a2-93cf-d6dacbaa0d20","space":10064,"runtime":"python3.7","name":"app1","path":"8ywpyf","project":"b0uh4u4s","account":"144798365827","region":"sa-east-1","deps":["fastapi","starlette==0.14.2","typing","passlib","SQLAlchemy","python-jose","datetime"],"envs":null,"public":true,"log_level":"debug","cron":""}

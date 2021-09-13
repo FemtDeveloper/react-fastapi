@@ -11,12 +11,11 @@ function App() {
       },
     };
     const response = await axios
-      // .get("http://127.0.0.1:8000/api")
-      .get("https://6x6myt.deta.dev/")
+      .get("http://ec2-3-141-19-179.us-east-2.compute.amazonaws.com:8000/api")
       .then((response) => {
         const data = response.data;
         console.log(data);
-        setMessage(data.Hello);
+        setMessage(data.message);
       });
   };
 
