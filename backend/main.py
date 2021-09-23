@@ -10,9 +10,19 @@ from fastapi.params import Depends
 from sqlalchemy.orm.session import Session
 from schemas import UserCreate
 from fastapi.security import OAuth2PasswordRequestForm
+from fastapi.middleware.cors import CORSMiddleware
 
 
 app  = FastAPI()
+
+origins = [
+    "http://localhost:3000",
+    "http://localhost:8080",
+]
+app.add_middleware(CORSMiddleware,allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],)
 
 Base.metadata.create_all(engine)
 
@@ -22,18 +32,18 @@ async def create_user(user: UserCreate, db: Session=Depends(get_db)):
     db_user = await get_user_by_email(user.email, db)
     if db_user:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail='User already exists')
-    await new_user(user, db)
+    user = await new_user(user, db)
     return await create_token(user)
 
 @app.post('/api/token')
 async def generate_token(form_data: OAuth2PasswordRequestForm = Depends(), db: Session= Depends(get_db)):
     user = await authenticate_user(form_data.username, form_data.password, db)
     if not user:
-        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail='Inavalid Credentials')
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail='Invalid Credentials')
     return await create_token(user)
 
-@app.get('/api/users/{id}', response_model= schemas.User)
-async def get_user(id: int, user: schemas.User =  Depends(get_current_user), db: Session= Depends(get_db)):
+@app.get('/api/users/me', response_model= schemas.User)
+async def get_user(user: schemas.User =  Depends(get_current_user)):
     return user
 
 @app.post('/api/leads', response_model=schemas.Lead)

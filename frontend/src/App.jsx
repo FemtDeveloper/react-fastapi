@@ -1,8 +1,13 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import axios from "axios";
+import Register from "./components/Register";
+import Header from "./components/Header";
+import { UserContext } from "./context/UserContext";
 
 function App() {
   const [message, setMessage] = useState("");
+  const [token] = useContext(UserContext);
+
   const getWelcomeMessage = async () => {
     const requestOptions = {
       method: "GET",
@@ -11,7 +16,8 @@ function App() {
       },
     };
     const response = await axios
-      .get("http://ec2-3-141-19-179.us-east-2.compute.amazonaws.com:8000/api")
+      .get("http://127.0.0.1:8000/api")
+      // .get("http://ec2-3-141-19-179.us-east-2.compute.amazonaws.com:8000/api")
       .then((response) => {
         const data = response.data;
         console.log(data);
@@ -22,11 +28,18 @@ function App() {
   useEffect(() => {
     getWelcomeMessage();
   }, []);
+
   return (
-    <div className="App">
-      <h1>titulo de los leads</h1>
-      <h2>{message}</h2>
-    </div>
+    <>
+      <Header title={message} />
+      <div className="columns">
+        <div className="column"></div>
+        <div className="column m-5 is-two-thirds">
+          {!token ? <Register /> : <p>Table</p>}
+        </div>
+        <div className="column"></div>
+      </div>
+    </>
   );
 }
 
