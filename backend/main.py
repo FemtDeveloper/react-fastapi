@@ -62,13 +62,13 @@ async def get_lead(lead_id: int, user: schemas.User=Depends(get_current_user),
                     db: Session = Depends(get_db)):
     return await services.get_lead_by_id(lead_id, user, db)
 
-@app.delete('/api/{lead_id}', status_code= 204)
+@app.delete('/api/leads/{lead_id}', status_code= 204)
 async def delete_lead(lead_id: int, user: schemas.User=Depends(get_current_user), 
                     db: Session = Depends(get_db)):    
     await lead_delete(lead_id, user, db)
     return 'Lead sucessfully deleted'
 
-@app.put('/api/{lead_id}', status_code= 200)
+@app.put('/api/leads/{lead_id}', status_code= 200)
 async def update_lead(lead_id: int, lead: schemas.LeadCreate, user: schemas.User=Depends(get_current_user), 
                     db: Session = Depends(get_db)):
     await lead_update(lead_id, lead, user, db)
