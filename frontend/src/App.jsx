@@ -3,6 +3,8 @@ import axios from "axios";
 import Register from "./components/Register";
 import Header from "./components/Header";
 import { UserContext } from "./context/UserContext";
+import Login from "./components/Login";
+import Table from "./components/Table";
 
 function App() {
   const [message, setMessage] = useState("");
@@ -35,9 +37,16 @@ function App() {
       <div className="columns">
         <div className="column"></div>
         <div className="column m-5 is-two-thirds">
-          {!token ? <Register /> : <p>Table</p>}
+          {!token ? (
+            <div className="columns">
+              <Register />
+              <Login />
+            </div>
+          ) : (
+            <Table />
+          )}
         </div>
-        <div className="column"></div>
+        <div className="column">{/* <Login/> */}</div>
       </div>
     </>
   );
